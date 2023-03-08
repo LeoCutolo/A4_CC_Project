@@ -8,18 +8,28 @@ services:
   mariadb:
     container_name: mariadb
     image: mariadb:latest
-    restart: unless-stopped
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_USER: user
+      MYSQL_PASSWORD_FILE: /run/secrets/db_user_password
+      MYSQL_DATABASE: weather
     ports:
       - 3306:3306
+    tty: true
     networks:
       - bridge-project
     volumes:
       - ./database:/var/lib/mysql
-  
+      - ./sql:/docker-entrypoint-initdb.d
+    secrets:
+      - db_root_password
+      - db_user_password
+
   flask:
     container_name: flask
     build: .
-    restart: unless-stopped
+    restart: always
     ports:
       - 5000:5000
     networks:
@@ -32,3 +42,9 @@ services:
         target: /app/src/city.txt
     depends_on:
       - mariadb
+
+secrets:
+  db_root_password:
+    file: ./secrets/db_root_password.txt
+  db_user_password:
+    file: ./secrets/db_user_password.txt

@@ -1,0 +1,10 @@
+CREATE DATABASE IF NOT EXISTS weather;
+use weather;
+
+CREATE TABLE IF NOT EXISTS temperature (
+  id INT AUTO_INCREMENT,
+  city VARCHAR(255) NOT NULL,
+  temperature FLOAT NOT NULL,
+  date DATETIME NOT NULL,
+  PRIMARY KEY (id)
+);
