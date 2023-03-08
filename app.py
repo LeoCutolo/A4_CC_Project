@@ -14,7 +14,7 @@ def get_weather(city):
 
 @app.route('/')
 def index():
-    with open('city.txt', 'r') as f:
+    with open('/app/src/city.txt', 'r') as f:
         city = f.readline().strip()
     weather = get_weather(city)
     return render_template('index.html', weather=weather)
