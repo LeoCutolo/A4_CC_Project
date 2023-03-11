@@ -9,5 +9,15 @@
     <body>
         <h1>Weather for {{ weather['name'] }}, {{ weather['sys']['country'] }}</h1>
         <p>Current temperature: {{ weather['main']['temp'] }}°C</p>
+        <br/>
+        <br/>
+        <h2>Previous temperature today</h2>
+        <ul>
+            {% for temp in temperatures: %}
+            <li>
+                {{ temp }}
+            </li>
+            {% endfor %}
+        </ul>
     </body>
 </html>

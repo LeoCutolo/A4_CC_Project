@@ -14,6 +14,7 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD_FILE: /run/secrets/db_user_password
       MYSQL_DATABASE: weather
+      TZ: Europe/Paris
     ports:
       - 3306:3306
     tty: true
