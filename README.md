@@ -19,6 +19,3 @@ This project consits in creating a dockerized application that will get the weat
     > DB_PASSWORD=your-db-password (defined in [db_user_password.txt](secrets/db_user_password.txt))<br>
 5. create a `city.txt` file at the root of the project containing the name of the city you want to get the weather for
 6. Run the containers with `docker-compose up -d`
-
-## Quick information
-
