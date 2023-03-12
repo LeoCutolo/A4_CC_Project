@@ -1,49 +1,70 @@
+# the version of docker-compose used
 version: '3'
 
+# creation of a network to connect the containers (of type bridge)
 networks: 
   bridge-project:
     driver: bridge
 
+# definition of the services
 services: 
+  # first a database
   mariadb:
+    # name of the container
     container_name: mariadb
+    # selection of the image
     image: mariadb:latest
+    # restart policy
     restart: always
+    # environment variables
     environment:
+      # using secrets to store the passwords
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_USER: user
       MYSQL_PASSWORD_FILE: /run/secrets/db_user_password
       MYSQL_DATABASE: weather
+      # timezone because we use the time in the database
       TZ: Europe/Paris
+    # ports to expose
     ports:
       - 3306:3306
-    tty: true
+    # network connection
     networks:
       - bridge-project
+    # volumes to mount
     volumes:
+      # this one is to store the data
       - ./database:/var/lib/mysql
+      # this one is to initialize the database
       - ./sql:/docker-entrypoint-initdb.d
+    # secrets to use
     secrets:
       - db_root_password
       - db_user_password
 
+  # then the app itself
   flask:
     container_name: flask
+    # build the image from the Dockerfile in the current directory
     build: .
     restart: always
     ports:
       - 5000:5000
     networks:
       - bridge-project
+    # environment variables stored in a file this time
     env_file:
       - .env
+    # using a mount bind here for the city.txt file
     volumes:
       - type: bind
         source: ./city.txt
         target: /app/src/city.txt
+    # this container depends on the database, it won't start until the database is ready
     depends_on:
       - mariadb
 
+# definition of the secrets
 secrets:
   db_root_password:
     file: ./secrets/db_root_password.txt
