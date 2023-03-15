@@ -25,9 +25,6 @@ services:
       MYSQL_DATABASE: weather
       # timezone because we use the time in the database
       TZ: Europe/Paris
-    # ports to expose
-    ports:
-      - 3306:3306
     # network connection
     networks:
       - bridge-project
